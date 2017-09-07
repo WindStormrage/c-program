@@ -1,0 +1,20 @@
+#indude<stdio,h>
+int main( )
+{
+ int a,f;
+ float f,g;
+ printf(farction:");
+ scanf("%d",&f)
+ if(f>=90) a=4;
+ else      a=(f--60/10);
+ switch(a)
+ {
+  case0:g=e;break;
+  case2:g=e;break;
+  case3:g=e;break;
+  case4:g=e;break;
+  case5:g=e;break;
+ }
+  printf("grade=%c\n"g);
+ return 0;
+}

@@ -1,0 +1,344 @@
+#include<stdio.h>
+#define M 12
+int fg(int k[],int left,int right)// fg(k,left,right)
+{
+ int key=k[left];
+ while(left<right) //left==right时退出循环 
+    { 
+     while(left<right&&k[right]>=key)//key在左，找比key小的数 
+        --right;
+     k[left]=k[right];
+     while(left<right&&k[left]<=key) //key在右，找比key大的数 
+        ++left;
+     k[right]=k[left]; 
+    } 
+ k[left]=key;
+ return left; 
+} 
+
+kp(int k[],int left,int right) //kp(k,0,a-1); 
+{ 
+ int i; 
+ int a;
+ if(left<right)
+   {
+    i=fg(k,left,right);
+    kp(k,left,i-1); //分开 
+    kp(k,i+1,right); 
+   } 
+} 
+
+int main()
+{
+ int k[M],a;
+ for(a=0;a<M;a++)
+    scanf("%d",&k[a]);  
+ kp(k,0,M-1);
+ for(a=0;a<M;a++)
+    printf("%d ",k[a]);
+ system("pause");
+ return 0;
+}
+
+快排！！！
+
+
+
+
+
+
+#include<stdio.h>
+int c[200],len,x[200],y[200],len1,len2;
+char a[200],b[200];
+int max(int c,int d)                                       //数字的比较大小 
+{
+    if(c>d)
+        return c;
+    else
+        return d;
+}
+int strmax()                                               //数组的比较大小 
+{
+    int i;
+    if(len1<len2)
+        return 0;
+    else if(len1>len2)
+        return 1;
+    for(i=0;i<len;i++)
+    {
+        if(a[i]!=b[i])
+        {
+            if(a[i]<b[i])
+               return 0;
+            else
+               return 1;
+        }
+    }
+    return 1;
+}
+void getstr()                                               //输入以及初始化 
+{
+    memset(x,0,sizeof(b));
+    memset(y,0,sizeof(a));
+    int i;
+    scanf("%s",a);
+    len1=len=strlen(a);
+    for(i=0;i<len1;i++)
+    {
+        a[i]=a[i]-'0';
+    }
+    scanf("%s",b);
+    len=max(strlen(b),len);
+    len2=strlen(b);
+    for(i=0;i<len2;i++)
+    {
+        b[i]=b[i]-'0';
+    }
+}
+void sequence()                                          //顺序 
+{
+    int i;
+    memset(x,0,sizeof(x));
+    memset(y,0,sizeof(y));
+    for(i=0;i<len1;i++)
+        x[i]=a[i];
+    for(i=0;i<len2;i++)
+        y[i]=b[i];
+}
+void antitone()                                         //倒序 
+{
+    int i;
+    memset(x,0,sizeof(x));
+    memset(y,0,sizeof(y));
+    for(i=0;i<len1;i++)
+        x[i]=a[len1-i-1];
+    for(i=0;i<len2;i++)
+        y[i]=b[len2-i-1];
+}
+void plus()                                            //加法的主程序 
+{
+    getstr();
+    antitone();
+    memset(c,0,sizeof(c));
+    int i;
+    for(i=0;i<len;i++)
+    {
+        c[i]=c[i]+x[i]+y[i];
+        c[i+1]=c[i]/10;
+        c[i]=c[i]%10;
+    }
+}
+void mainofsub(int m[],int n[])                     //减法的主要程序（只允许大数字减小数字） 
+{
+    int i;
+    for(i=0;i<len;i++)
+    {
+        c[i]=c[i]+m[i]-n[i];
+        if(c[i]<0)
+        {
+            c[i+1]=-1;
+            c[i]=10+c[i];
+        }
+    }
+}
+void subtraction()                              //减法的外围程序 
+{
+    int i,t;
+    memset(c,0,sizeof(c));
+    getstr();
+    antitone();
+    if(strmax()==0)
+    {
+        mainofsub(y,x);
+        printf("-");
+    }
+    else
+    {
+        mainofsub(x,y);
+    }
+}
+void mutiply()                                        //乘法的主程序 
+{
+    getstr();
+    antitone();
+    memset(c,0,sizeof(c));
+    int i,j;
+    for(i=0;i<len1;i++)
+        for(j=0;j<len2;j++)
+        {
+            c[i+j]=c[i+j]+x[i]*y[j];
+            c[i+j+1]=c[i+j+1]+c[i+j]/10;
+            c[i+j]=c[i+j]%10;
+        }
+    len=len1+len2;
+}
+void division()                                          //除法的主程序 
+{
+    int i,n=0,k=0;
+    getstr();
+    antitone();
+    for(i=0;i<=len2-1;i++)
+        n=n*10+y[len2-i-1];
+    for(i=0;i<=len1-1;i++)
+    {
+        k=k*10+x[len1-1-i];
+        c[len-1-i]=k/n;
+        k=k%n;
+    }
+}
+int main()
+{
+    char i,t=0;
+    printf("1.加\n2.减\n3.乘\n4.除\n");
+    scanf("%d",&i);
+    if(i==1)
+        plus();
+    else if(i==2)
+        subtraction();
+    else if(i==3)
+        mutiply();
+    else if(i==4)
+        division();
+    else
+    {
+        printf("error\n!");
+        system("pause");
+        return 0;
+    }
+    for(i=len;i>0;i--)
+    {
+        if(c[i]!=0)
+            break;
+    }
+    for(;i>=0;i--)
+       printf("%d",c[i]);
+    system("pause");
+    return 0;
+}
+
+
+大吉大利大整数
+
+
+
+
+
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+int n,m=0,a[11],b[11]={0},j,k=-1;
+
+void g(int m)
+   {
+    int i;
+    k++;
+    a[k]=m;
+    if(k==n)
+      {
+       for(i=1;i<=n;i++)
+          printf("%d ",a[i]);
+       printf("\n");
+      }
+    else    
+      for(i=1;i<=n;i++)
+         if(b[i]==0)
+           {
+            b[i]=1;
+            g(i);
+           }
+    k--;
+    b[m]=0;
+   }
+
+int main()
+{
+ freopen("shuzi.txt","r",stdin);
+ freopen("ans.txt","w",stdout); 
+ scanf("%d",&n);
+ g(m);
+ return 0 ;
+}
+深搜
+
+
+
+#include<stdio.h>
+
+int gcd(int a,int b)
+{
+    int r,t;
+    if(a<b)
+     { t=a;a=b;b=t;}
+    do
+      {
+       r=a%b;
+       a=b;
+       b=r;      
+    }while(r!=0);
+    return a;
+    }
+int lcm(int a,int b)
+{
+  int t,r;
+  t=gcd(a,b); 
+  r=(a*b)/t;
+  return r;  
+    
+    
+    }    
+int main()
+{
+    int a,b,r,n;
+    printf("请输入任意两个整数：\n");
+    scanf("%d%d",&a,&b); 
+    r=gcd(a,b);
+    printf("最大公因数为:%d\n",r);
+    n=lcm(a,b);
+    printf("最小公倍数为：%d\n",n);
+    
+    getch();
+    return 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+void  hzl(long int a[], int i, int j)
+{
+     int k, m, n;
+       m=i;
+       n=j;
+       k=a[i];
+     if(i<j)
+     {
+       for(; j>i; j--)
+       {
+           if(k>a[j])
+           {
+              a[i]=a[j];
+              break;       
+           }          
+       }
+       for(; i<j; i++)
+       {
+           if(k<a[i])
+           {  
+              a[j]=a[i];
+              break;
+           }  
+       }
+       a[i]=k;
+     hzl(a, m, j-1);
+     hzl(a, i+1, n); 
+     }                    
+}
